@@ -30,7 +30,7 @@ public class UserController {
 	@GetMapping("/global-exception")
 	public String testGlobalException() throws Exception {
 		
-		throw new NullPointerException(); 	 	// 500 and uses spring default global exception handler
+		throw new NullPointerException("NPE"); 	 	// 500 and uses spring default global exception handler
 		
 		/* 
 		// without ControllerAdvice
@@ -43,10 +43,11 @@ public class UserController {
 		
 		// with ControllerAdvice
 		{
-			"status": 500,
-			"message": null,
-			"details": "uri=/api/v1/users/globalexception",
-			"timestamp": "2025-08-21T16:07:42.8747041"
+		    "timestamp": "2025-08-21T20:12:05.3793983",
+		    "status": 500,
+		    "error": "Internal Server Error",
+		    "message": "NPE",
+		    "path": "/api/v1/users/global-exception"
 		}
 		*/
 	}

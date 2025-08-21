@@ -11,14 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import net.projectsync.globalexceptionhandler.model.Book;
 
 @RestController
 @RequestMapping("/api/v1/books")
 public class BookController {
 	
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(value = HttpStatus.CREATED)
 	@PostMapping
 	public String createBook(@RequestBody Book book) {
 		return "Book created successfully";

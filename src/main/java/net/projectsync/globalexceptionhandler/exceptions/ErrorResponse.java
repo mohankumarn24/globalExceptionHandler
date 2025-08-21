@@ -7,32 +7,38 @@ import java.time.LocalDateTime;
  */
 class ErrorResponse {
 	
+	private final LocalDateTime timestamp;
     private final int status;
+    private final String error;
     private final String message;
-    private final String details;
-    private final LocalDateTime timestamp;
-
+    private final String path;
+    
     private ErrorResponse(Builder builder) {
-        this.status = builder.status;
+       	this.timestamp = builder.timestamp;
+    	this.status = builder.status;
+        this.error = builder.error;
         this.message = builder.message;
-        this.details = builder.details;
-        this.timestamp = builder.timestamp;
+        this.path = builder.path;
     }
 
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+    
     public int getStatus() {
         return status;
+    }
+    
+    public String getError() {
+        return error;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public String getDetails() {
-        return details;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+    public String getPath() {
+        return path;
     }
 
     /**
@@ -40,13 +46,24 @@ class ErrorResponse {
      */
     public static class Builder {
     	
-        private int status;
-        private String message;
-        private String details;
         private LocalDateTime timestamp;
+        private int status;
+        private String error;
+        private String message;
+        private String path;
 
+        public Builder timestamp(LocalDateTime timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+        
         public Builder status(int status) {
             this.status = status;
+            return this;
+        }
+        
+        public Builder error(String error) {
+            this.error = error;
             return this;
         }
 
@@ -55,13 +72,8 @@ class ErrorResponse {
             return this;
         }
 
-        public Builder details(String details) {
-            this.details = details;
-            return this;
-        }
-
-        public Builder timestamp(LocalDateTime timestamp) {
-            this.timestamp = timestamp;
+        public Builder path(String path) {
+            this.path = path;
             return this;
         }
 
@@ -85,15 +97,17 @@ class ErrorResponse {
 class ErrorResponse {
 	
     private int status;
+    private String error;
     private String message;
-    private String details;
+    private String path;
     private LocalDateTime timestamp;
 
     public ErrorResponse(int status, String message, String details, LocalDateTime timestamp) {
     	
         this.status = status;
+        this.error = error;
         this.message = message;
-        this.details = details;
+        this.path = path;
         this.timestamp = timestamp;
     }
 

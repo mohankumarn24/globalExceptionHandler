@@ -24,16 +24,18 @@ public class GlobalExceptionHandler {
      * Handler for user built CustomException
      */
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(CustomException ex, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(CustomException ex, HttpServletRequest request) {
         
     	logger.info("custom exception called");
     	/*
     	 * without builder design pattern using POJO ErrorResponse
         ErrorResponsePojo ErrorResponsePojo = new ErrorResponsePojo(
+        		LocalDateTime.now()
                 HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase()
                 ex.getMessage(),
-                request.getDescription(false),
-                LocalDateTime.now()
+                request.getRequestURI(),
+                
         );
         
          return new ResponseEntity<>(ErrorResponsePojo, HttpStatus.NOT_FOUND);
@@ -41,10 +43,11 @@ public class GlobalExceptionHandler {
     	
     	// using builder design pattern
         ErrorResponse errorResponse = ErrorResponse.builder()
+        		.timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
+                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
                 .message(ex.getMessage())
-                .details(request.getDescription(false))
-                .timestamp(LocalDateTime.now())
+                .path(request.getRequestURI())
                 .build();
         
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
@@ -54,7 +57,7 @@ public class GlobalExceptionHandler {
      * Handler for validation exceptions (e.g., @Valid failed)
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
         
     	logger.info("MethodArgumentNotValidException called");
         Map<String, String> errors = new HashMap<>();
@@ -63,10 +66,11 @@ public class GlobalExceptionHandler {
         );
         
         ErrorResponse errorResponse = ErrorResponse.builder()
+        		.timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .message("Validation failed")
-                .details(errors.toString())
-                .timestamp(LocalDateTime.now())
+                .path(errors.toString())
                 .build();
         
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -83,10 +87,11 @@ public class GlobalExceptionHandler {
         
     	logger.info("incorrect endpoint called");
         ErrorResponse errorResponse = ErrorResponse.builder()
+        		.timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
+                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
                 .message("No handler found for " + ex.getHttpMethod() + " " + ex.getRequestURL())
-                .details(request.getRequestURI())
-                .timestamp(LocalDateTime.now())
+                .path(request.getRequestURI())
                 .build();
         
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
@@ -98,10 +103,11 @@ public class GlobalExceptionHandler {
         
     	logger.info("incorrect method called");
         ErrorResponse errorResponse = ErrorResponse.builder()
+        		.timestamp(LocalDateTime.now())
                 .status(HttpStatus.METHOD_NOT_ALLOWED.value())
-                .message(String.format("Method %s not supported for this endpoint. Supported methods: ", ex.getMethod(), String.join(", ", ex.getSupportedMethods())))
-                .details(request.getRequestURI())
-                .timestamp(LocalDateTime.now())
+                .error(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase())
+                .message(String.format("Method %s not supported for this endpoint. Supported methods: %s", ex.getMethod(), String.join(", ", ex.getSupportedMethods())))
+                .path(request.getRequestURI())
                 .build();
         
         return new ResponseEntity<>(errorResponse, HttpStatus.METHOD_NOT_ALLOWED);
@@ -111,14 +117,15 @@ public class GlobalExceptionHandler {
      * Handle all other exceptions.
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex, HttpServletRequest  request) {
         
     	logger.info("general exception called");
         ErrorResponse errorResponse = ErrorResponse.builder()
+        		.timestamp(LocalDateTime.now())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
                 .message(ex.getMessage())
-                .details(request.getDescription(false))
-                .timestamp(LocalDateTime.now())
+                .path(request.getRequestURI())
                 .build();
         
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -8,15 +8,16 @@ import java.time.LocalDateTime;
 class ErrorResponsePojo {
 	
     private int status;
+    private String error;
     private String message;
-    private String details;
+    private String path;
     private LocalDateTime timestamp;
 
     public ErrorResponsePojo(int status, String message, String details, LocalDateTime timestamp) {
     	
         this.status = status;
         this.message = message;
-        this.details = details;
+        this.path = details;
         this.timestamp = timestamp;
     }
 
@@ -29,6 +30,14 @@ class ErrorResponsePojo {
         this.status = status;
     }
 
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+    
     public String getMessage() {
         return message;
     }
@@ -37,12 +46,12 @@ class ErrorResponsePojo {
         this.message = message;
     }
 
-    public String getDetails() {
-        return details;
+    public String getPath() {
+        return path;
     }
 
-    public void setDetails(String details) {
-        this.details = details;
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public LocalDateTime getTimestamp() {
