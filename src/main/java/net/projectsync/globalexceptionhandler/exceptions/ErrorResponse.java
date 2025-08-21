@@ -3,7 +3,7 @@ package net.projectsync.globalexceptionhandler.exceptions;
 import java.time.LocalDateTime;
 
 /**
- * Error response model for API responses with Builder pattern
+ * Error response DTO for API responses with Builder pattern
  */
 class ErrorResponse {
 	

@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
     }
     
     /**
-     * Handler for validation exceptions
+     * Handler for validation exceptions (e.g., @Valid failed)
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex, WebRequest request) {
@@ -74,9 +74,9 @@ public class GlobalExceptionHandler {
      * Handle all other exceptions.
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex, WebRequest request) {
         
-    	logger.info("global exception called");
+    	logger.info("general exception called");
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message(ex.getMessage())
