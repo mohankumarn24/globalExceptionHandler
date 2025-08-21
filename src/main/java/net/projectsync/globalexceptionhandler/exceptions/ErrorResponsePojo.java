@@ -6,22 +6,30 @@ import java.time.LocalDateTime;
  * Error response model for API responses
  */
 class ErrorResponsePojo {
-	
+
+    private LocalDateTime timestamp;
     private int status;
     private String error;
     private String message;
     private String path;
-    private LocalDateTime timestamp;
 
-    public ErrorResponsePojo(int status, String message, String details, LocalDateTime timestamp) {
-    	
-        this.status = status;
+    public ErrorResponsePojo(LocalDateTime timestamp, int status, String error, String message, String path) {
+      	this.timestamp = timestamp;
+    	this.status = status;
+    	this.error = error;
         this.message = message;
-        this.path = details;
-        this.timestamp = timestamp;
+        this.path = path;
     }
 
     // Getters and setters
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }    
+    
     public int getStatus() {
         return status;
     }
@@ -52,13 +60,5 @@ class ErrorResponsePojo {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
     }
 }
