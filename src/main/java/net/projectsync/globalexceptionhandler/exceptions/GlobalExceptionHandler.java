@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+/**
+ * CustomException extends RTE. This is okay
+ * - Use RuntimeException for custom exceptions in Spring Boot apps (business logic, validation, REST errors).
+ * - Reserve checked exceptions for cases where the caller really must handle the error right away (e.g., I/O, parsing).
+ */
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
