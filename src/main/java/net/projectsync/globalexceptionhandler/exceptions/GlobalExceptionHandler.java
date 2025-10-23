@@ -10,8 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 /**
@@ -20,7 +20,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
  * - Reserve checked exceptions for cases where the caller really must handle the error right away (e.g., I/O, parsing).
  */
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);    
