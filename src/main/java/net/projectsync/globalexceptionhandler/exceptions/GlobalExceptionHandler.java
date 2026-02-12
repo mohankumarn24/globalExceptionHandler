@@ -120,6 +120,12 @@ public class GlobalExceptionHandler {
     
     /**
      * Handle all other exceptions.
+     * Best practice:
+     *  - Consider having separate handlers for different exception types to provide more specific error responses
+     *  - This implementation will work for RTEs, but you might want more granular control over different exception types.
+     *  
+     * Note: 
+     * This won't catch Error - Your handler won't catch OutOfMemoryError, StackOverflowError, etc., since they extend Error, not Exception.
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex, HttpServletRequest  request) {
@@ -134,6 +140,29 @@ public class GlobalExceptionHandler {
                 .build();
         
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    /**
+     * Catch order matters - If you have multiple @ExceptionHandler methods, Spring uses the most specific one first. 
+     * 
+     * For example:
+     *   @ExceptionHandler(NullPointerException.class)   // More specific
+     *   @ExceptionHandler(RuntimeException.class)       // Less specific
+     *   @ExceptionHandler(Exception.class)              // Least specific
+     */
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex, HttpServletRequest request) {
+        
+    	// Handle RTEs specifically
+    	logger.info("RTE");
+        ErrorResponse errorResponse = ErrorResponse.builder()
+        		.timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error(HttpStatus.CONFLICT.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+    	return new ResponseEntity<>(errorResponse, HttpStatus.METHOD_NOT_ALLOWED);
     }
 }
 
